@@ -5,6 +5,7 @@ import MockAdapter from "axios-mock-adapter";
 import topLangs from "../api/top-langs.js";
 import { renderTopLanguages } from "../src/cards/top-languages-card.js";
 import { renderError } from "../src/common/utils.js";
+import { expect, it, describe, afterEach } from "@jest/globals";
 
 const data_langs = {
   data: {
@@ -138,7 +139,12 @@ describe("Test /api/top-langs", () => {
     await topLangs(req, res);
 
     expect(res.setHeader).toBeCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toBeCalledWith(renderError(error.errors[0].message));
+    expect(res.send).toBeCalledWith(
+      renderError(
+        error.errors[0].message,
+        "Make sure the provided username is not an organization",
+      ),
+    );
   });
 
   it("should render error card on incorrect layout input", async () => {
